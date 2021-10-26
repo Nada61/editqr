@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="./js/qrcode.js" defer></script>
+    <script src="./js/script.js" defer></script>
+    <script>
+    $(document).ready(function() {
+ 
+        initImageUpload();
+ 
+        function initImageUpload() {
+            $("#btn-submit").click(function(e) {
+                e.preventDefault();
+ 
+                var everlive = new Everlive({
+                    appId: "",
+                    scheme: "https"
+                });
+ 
+                // construct the form data and apply new file name
+                var file = $('#image-file').get(0).files[0];
+ 
+                var newFileName = file.filename + "new";
+                var formData = new FormData();
+                formData.append('file', file, newFileName);
+ 
+ 
+                $.ajax({
+                    url: everlive.files.getUploadUrl(), // get the upload URL for the server
+                    success: function(fileData) {
+                        alert('Created file with Id: ' + fileData.Result[0].Id); // access the result of the file upload for the created file
+                        alert('The created file Uri is available at URL: ' + fileData.Result[0].Uri);
+                    },
+                    error: function(e) {
+                        alert('error ' + e.message);
+                    },
+                    // Form data
+                    data: formData,
+                    type: 'POST',
+                    cache: false,
+                    contentType: false,
+                    processData: false
+                });
+                return false;
+            });
+        }
+    });
+</script>
+</head>
+
+<body>
+    
+     <div class="container py-5">
+    <div class="row text-center text-white">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="display-4">Make your life easier</h1>
+            <p class="lead mb-0">Using QR Code and Link Generator.</p>
+        </div>
+    </div>
+</div>
+   
+    <div class="container">
+        <div class="row text-center">
+        <div class="col-8">
+            <div class="bg-white rounded shadow-sm py-5 px-4">
+            <h4 class="mb-0">Generate your QR Code</h4>
+            <div class="main" id="main">
+        
+     <form target="_blank" action="gov/eg/Results/upload-manager.php" method="post" enctype="multipart/form-data">
+         
+         <label class="initImageUpload" for="apply"><input type="file" name="photo" id="apply" accept="image/*.pdf">Get file</label>
+            
+         <p><img id="output" width="200" class=" px-2 mt-2 output" name="data" style="" /></p>
+ 
+         <button class="btn" id="generateBtn">Generate</button>
+         
+        </form>
+                
+    
+        
+    </div>
+            
+            </div> 
+    </div>
+             <div class="col-4">
+            <div class="bg-white rounded shadow-sm py-5 px-4">
+            <h4 class="mb-0">Preview QR code</h4>
+            <div class="main" id="main">
+                <div class="qrdiv hide" id="qrdiv">
+            <div class="qrcode" id="qrcode"></div>
+            <button class="downloadBtn" id="downloadBtn">Download</button>
+        </div>
+        
+      
+        
+        
+        
+            </div>
+            
+            </div> 
+            </div>
+            
+               
+    </div>
+    </div>
+
+</body>
+
+</html>
